@@ -1,0 +1,9 @@
+html
+  head
+    title - #{title}
+    block head
+      link(rel='stylesheet' type='text/css' href='css/application.css')
+      script(src='js/application.js')
+  body
+    block content
+    include ../components/footer

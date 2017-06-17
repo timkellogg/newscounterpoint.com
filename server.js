@@ -1,21 +1,17 @@
-const koa = require('koa')
-const app = new koa()
+const koa     = require('koa')
+const serve   = require('koa-static')
+const app     = new koa()
+const router  = require('./router')
+const logging = require('koa-logger')
+const views   = require('koa-views')
 
-// middlewares
-const logging    = require('koa-logger')
-const templating = require('koa-views')
+if (process.env.development) {
+  app.use(require('koa-browser-sync')({init: true}));
+}
 
 app.use(logging())
-app.use(templating(__dirname + '/views'), {
-  map: {
-    html: 'hbs',
-  }
-})
-
-app.use(async ctx => {
-  ctx.state = { title: 'My title' }
-  await ctx.render('pages/')
-})
+app.use(serve(__dirname + '/assets/dist'))
+app.use(views(__dirname + '/views', { extension: 'pug' }))
+app.use(router.routes())
 
 app.listen(3000)
-
