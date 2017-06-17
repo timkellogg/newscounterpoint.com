@@ -7,7 +7,9 @@ const browserSync = require('browser-sync')
 const runSequence = require('run-sequence')
 const del         = require('del')
 const prefix      = require('gulp-autoprefixer')
-const concatCss   = require('gulp-concat-css')
+const concat      = require('gulp-concat')
+const cssnano     = require('gulp-cssnano')
+const pump        = require('pump')
 
 const isDev = process.NODE_ENV || true
 
@@ -42,20 +44,42 @@ gulp.task('default', ['clean'], () => {
   })
 })
 
-gulp.task('styles', () => {
-  gulp
-    .src(config.styles.src)
-    .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
-    .pipe(prefix('last 1 version'))
-    .pipe(gulpif(!config.isDev, csso()))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(config.styles.dist))
-    .pipe(gulpif(config.isDev, reload({ stream: true })))
+gulp.task('styles', (cb) => {
+  pump(
+    [
+      gulp.src([
+        config.styles.watch
+      ]),
+      sourcemaps.init(),
+      concat('application.css'),
+      sass(),
+      cssnano({
+        autoprefixer: {
+          add: true,
+        },
+      }),
+      sourcemaps.write(),
+      gulp.dest(config.styles.dist),
+      // browserSync.stream(),
+    ],
+    cb
+  )
 })
 
 // compile javascript
+gulp.task('serve', () => {
+  // browserSync({
+  //   server: {
+  //     baseDir: config.dest,
+  //   },
+  //   notify: false,
+  //   open: false,
+  // })
 
+  gulp.task('styles:watch', ['styles'])
+  gulp.watch(config.styles.watch, ['styles:watch'])
+
+})
 
 // compile scss
 
