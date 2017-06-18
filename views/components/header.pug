@@ -1,4 +1,11 @@
 header.header
   a.header__icon(href="/")
     i.fi-home
-  span.header__hamburger.js-hamburger-click
+  .js-hamburger-click
+    .header__hamburger
+  ul.header__menu
+    li.header__menu__item
+      input.js-header-menu-search(type='text' name='search' placeholder='Search')
+    li.header__menu__item Recent
+    li.header__menu__item Controversial
+    

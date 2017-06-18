@@ -5,7 +5,9 @@
     z-index: 2;
   } @else if $position == 'high' {
     z-index: 3;
-  } 
+  } @else if $position == 'top' {
+    z-index: 4;
+  }
 }
 
 @mixin boxShadow($color) {
