@@ -1,28 +1,30 @@
-const gulp        = require('gulp')
-const sourcemaps  = require('gulp-sourcemaps')
-const sass        = require('gulp-sass')
-const csso        = require('gulp-csso')
-const gulpif      = require('gulp-if')
-const browserSync = require('browser-sync').create()
-const runSequence = require('run-sequence')
-// const del         = require('del')
-const prefix      = require('gulp-autoprefixer')
-const concat      = require('gulp-concat')
-const cssnano     = require('gulp-cssnano')
-// const pump        = require('pump')
-const browserify  = require('browserify')
-const uglify      = require('gulp-uglify')
-// const babel       = require('gulp-babel')
-const source      = require('vinyl-source-stream')
-const buffer      = require('vinyl-buffer')
+const gulp         = require('gulp')
+const gutil        = require('gulp-util')
+const uglify       = require('gulp-uglify')
+const gulpif       = require('gulp-if')
+const exec         = require('child_process').exec
+const notify       = require('gulp-notify')
+const buffer       = require('vinyl-buffer')
+const argv         = require('yargs').argv;
+const sass         = require('gulp-sass')
+const postcss      = require('gulp-postcss')
+const autoprefixer = require('autoprefixer-core')
+const sourcemaps   = require('gulp-sourcemaps')
+const browserSync  = require('browser-sync')
+const watchify     = require('watchify')
+const browserify   = require('browserify')
+const source       = require('vinyl-source-stream')
+const imagemin     = require('gulp-imagemin')
+const babelify     = require('babelify')
 
-console.log(process.env.development)
-const isDev = process.env.development || true
+const production = !!argv.production
+
+const build = argv._.length ? argv._[0] === 'build' : false;
+const watch = argv._.length ? argv._[0] === 'watch' : true;
 
 const config = {
-  isDev,
   views: {
-    watch: __dirname + '/assets/views/**/*.hbs',
+    watch: __dirname + '/views/**/*.pug',
   },
   styles: {
     src: __dirname + '/assets/src/scss/application.scss',
@@ -40,41 +42,131 @@ const config = {
     browser: 'google chrome',
   },
   dist: __dirname + '/assets/dist/**/*',
+  images: {
+    src: __dirname + '/assets/src/**/*.{gif,jpg,png,svg}',
+  }
 }
 
-gulp.task('js', () => {
-  return browserify({ entries: config.js.src })
-    .transform('babelify')
+const beep = () => {
+  const file = 'gulp/error.wav'
+  exec("afplay " + file);
+}
+
+const handleError = (task) => {
+  return (err) => {
+    beep()
+    
+      notify.onError({
+        message: task + ' failed, check the logs..',
+        sound: false
+      })(err)
+    
+    gutil.log(gutil.colors.bgRed(task + ' error:'), gutil.colors.red(err))
+  }
+}
+
+const tasks = {
+  sass() {
+    return gulp.src(config.styles.src)
+      .pipe(gulpif(!production, sourcemaps.init()))
+      .pipe(sass({
+        sourceComments: !production,
+        outputStyle: production ? 'compressed' : 'nested'
+      }))
+      .on('error', handleError('SASS'))
+      .pipe(gulpif(!production, sourcemaps.write({
+        'includeContent': false,
+        'sourceRoot': '.'
+      })))
+      .pipe(gulpif(!production, sourcemaps.init({
+        'loadMaps': true
+      })))
+      .pipe(postcss([autoprefixer({browsers: ['last 2 versions']})]))
+      .pipe(sourcemaps.write({
+        'includeContent': true
+      }))
+      .pipe(gulp.dest(config.styles.dist));
+  },
+
+  browserify() {
+    return browserify({
+      entries: config.js.src,
+      debug: true
+    })
+    .transform(babelify)
     .bundle()
     .pipe(source('application.js'))
-    .pipe(buffer())
-    // .pipe(sourcemaps.init())
-    .pipe(uglify())
-    // .pipe(sourcemaps.write('./maps'))
+    .pipe(gulpif(production, buffer()))
+    .pipe(gulpif(production, uglify()))
     .pipe(gulp.dest(config.js.dist))
-})
+  },
+  // browserify() {
+  //   let bundler = browserify(config.js.src, {
+  //     debug: !production,
+  //     cache: {}
+  //   })
+  //     .transform(babelify.configure({ presets: ['es2015']}))
 
-gulp.task('js-watch', ['js'], (done) => {
-    browserSync.reload()
-    done()
-});
+  //   const build = argv._.length ? argv._[0] === 'build' : false;
 
-gulp.task('styles', () => {
-  return gulp.src(config.styles.src)
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest(config.styles.dist))
-    .pipe(browserSync.stream())
-})
+  //   if (watch) {
+  //     bundler = watchify(bundler)
+  //   }
 
-gulp.task('serve', ['styles', 'js'], () => {
+  //   const rebundle = () => {
+  //     return bundler.bundle()
+  //       .on('error', handleError('Browserify'))
+  //       .pipe(source('application.js'))
+  //       .pipe(gulpif(production, buffer()))
+  //       .pipe(gulpif(production, uglify()))
+  //       .pipe(gulp.dest(config.js.dist))
+  //   }
+  //   bundler.on('update', rebundle)
+  //   return rebundle()
+  // },
+
+  optimize() {
+    return gulp.src(config.images.src)
+      .pipe(imagemin({
+        progressive: true,
+        svgoPlugins: [{removeViewBox: false}],
+        optimizationLevel: production ? 3 : 1
+      }))
+      .pipe(gulp.dest(config.dist))
+  },
+}
+
+gulp.task('serve', (done) => {
   browserSync.init({
     default: false,
     proxy: config.browserSync.proxy,
-  })
-
-  gulp.watch(config.js.watch, ['js-watch'])
-  gulp.watch(config.styles.watch, ['styles'])
+  }, done)
 })
 
-gulp.task('default', ['serve']);
+gulp.task('reload-sass', ['sass'], () => {
+  browserSync.reload()
+})
 
+gulp.task('reload-js', () => {
+  return gulp.watch(config.js.watch, ['browserify'], (done) => {
+    browserSync.reload()
+    done()
+  })
+})
+
+const req = build ? ['clean'] : []
+
+gulp.task('sass', req, tasks.sass)
+gulp.task('browserify', req, tasks.browserify)
+gulp.task('optimize', tasks.optimize)
+
+gulp.task('watch', ['sass', 'browserify', 'serve'], () => {
+  gulp.watch(config.styles.watch, ['reload-sass'])
+  gulp.watch(config.js.watch, ['reload-js'])
+
+  gutil.log(gutil.colors.bgGreen('Watching for changes...'))
+});
+
+gulp.task('build', ['assets', 'sass', 'browserify'])
+
+gulp.task('default', ['watch'])
