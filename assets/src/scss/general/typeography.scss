@@ -1,0 +1,46 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.4;
+  font-family: 'Raleway', sans-serif;
+  font-size: 100%;
+}
+
+h1 {
+  letter-spacing: 2px;
+  position: relative;
+  font-size: 42px;
+  padding-bottom: 5px;
+  display: inline-block;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: $spacer-sm;
+    height: 4px;
+    background-color: black;
+  }
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.article::first-letter {
+  font-size: 2.5rem;
+  display: block;
+  padding-right: 2px;
+  float: left;
+  padding-top: 10px;
+  padding-right: 10px;
+}
+
+.callout {
+  background-color: $gray;
+  font-style: italic;
+  padding: $spacer-sm;
+  display: inline-block;
+}

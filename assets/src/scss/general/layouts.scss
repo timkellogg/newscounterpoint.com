@@ -1,0 +1,9 @@
+body {
+  margin: 0;
+}
+
+.container {
+  margin-left: $spacer-sm;
+  margin-right: $spacer-sm;
+  padding-top: $headerHeight;
+}

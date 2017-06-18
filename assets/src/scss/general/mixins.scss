@@ -1,0 +1,13 @@
+@mixin zIndex($position) {
+  @if $position == 'low' {
+    z-index: 1;
+  } @else if $position == 'med' {
+    z-index: 2;
+  } @else if $position == 'high' {
+    z-index: 3;
+  } 
+}
+
+@mixin boxShadow($color) {
+  box-shadow: 2px 4px 10px #{$color};
+}

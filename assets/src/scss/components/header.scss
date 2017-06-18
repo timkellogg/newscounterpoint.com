@@ -1,0 +1,50 @@
+.header {
+  @include zIndex('high');
+  @include boxShadow($gray);
+
+  position: fixed;
+  display: flex;
+  width: 100%;
+  height: $headerHeight;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  padding-left: $spacer-sm;
+  padding-right: $spacer-sm;
+  background-color: $orange;
+
+  &__icon {
+    font-size: 2rem;
+    color: $white;
+  }
+
+  &__hamburger {
+    position: relative;
+    width: 25px;
+    height: 2px;
+    margin-right: 30px;
+    align-self: center;
+    background-color: $white;
+
+    &:before,
+    &:after {
+      content: '';
+      height: 2px;
+      width: 25px;
+      background-color: $white;
+      position: absolute;
+    }
+
+    &:before {
+      top: 7px;
+    }
+
+    &:after {
+      bottom: 7px;
+    }
+
+    &:active {
+      display: none;
+    }
+  }
+}

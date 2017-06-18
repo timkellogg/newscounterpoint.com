@@ -1,9 +1,11 @@
 html
   head
-    title - #{title}
+    title #{title}
     block head
+      link(rel='stylesheet' type='text/css' href='http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css')
       link(rel='stylesheet' type='text/css' href='css/application.css')
-      script(src='js/application.js')
   body
+    include ../components/header
     block content
     include ../components/footer
+    script(src='js/application.js')

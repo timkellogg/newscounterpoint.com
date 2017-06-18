@@ -43,14 +43,14 @@ const config = {
 }
 
 gulp.task('js', () => {
-  return browserify({ entries: config.js.src, debug: true })
+  return browserify({ entries: config.js.src })
     .transform('babelify')
     .bundle()
     .pipe(source('application.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init())
+    // .pipe(sourcemaps.init())
     .pipe(uglify())
-    .pipe(sourcemaps.write('./maps'))
+    // .pipe(sourcemaps.write('./maps'))
     .pipe(gulp.dest(config.js.dist))
 })
 
@@ -61,7 +61,7 @@ gulp.task('js-watch', ['js'], (done) => {
 
 gulp.task('styles', () => {
   return gulp.src(config.styles.src)
-    .pipe(sass())
+    .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest(config.styles.dist))
     .pipe(browserSync.stream())
 })
