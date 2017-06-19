@@ -1,12 +1,13 @@
 require('dotenv').config()
 
-const koa       = require('koa')
-const serve     = require('koa-static')
-const app       = new koa()
-const router    = require('./router')
-const logging   = require('koa-logger')
-const views     = require('koa-views')
-const mount     = require('koa-mount')
+const koa         = require('koa')
+const serve       = require('koa-static')
+const app         = new koa()
+const router      = require('./router')
+const logging     = require('koa-logger')
+const views       = require('koa-views')
+const mount       = require('koa-mount')
+const bodyParser  = require('koa-bodyparser')
 
 const config = {
   assetPath: __dirname + '/public',
@@ -18,6 +19,7 @@ if (process.env.development) {
 }
 
 app.use(logging())
+app.use(bodyParser())
 app.use(serve(config.assetPath))
 app.use(mount('/articles', serve(config.assetPath)))
 app.use(views(config.viewsPath, { extension: 'pug' }))

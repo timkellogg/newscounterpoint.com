@@ -3,7 +3,10 @@ extends ../layouts/base.pug
 block content
   .container
     if articles.length
-      h2 Articles
+      each article in articles
+        = article.title
+        = article.body
+        = article.published
     else
       h2 No articles
     

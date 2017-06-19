@@ -1,2 +1,8 @@
-form
-  .js-wysiwyg
+form(action = action method = method)
+  label Title
+  input(name='title' type='text')
+  label Publish?
+  input(name='published' type='checkbox')
+  textarea(name='body').js-wysiwyg
+
+  button Create

@@ -1,13 +1,22 @@
 input {
+  display: flex;
   width: 100%;
   height: 36px;
+  max-width: 300px;
+  margin-bottom: $spacer-sm;
   border: 0;
-  -webkit-appearance: none;
   border-bottom: 1px solid $black;
   padding-bottom: 2px;
   outline: none;
   line-height: 36px;
   font-size: 24px;
+}
+
+input[type='checkbox'] {
+  display: inline-block;
+  width: auto;
+  height: 12px;
+  line-height: 20px;
 }
 
 textarea {

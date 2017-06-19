@@ -26,6 +26,7 @@
     "handlebars": "^4.0.10",
     "jquery": "^3.2.1",
     "koa": "^2.2.0",
+    "koa-bodyparser": "^4.2.0",
     "koa-logger": "^3.0.0",
     "koa-router": "^7.2.1",
     "koa-static": "^3.0.0",
