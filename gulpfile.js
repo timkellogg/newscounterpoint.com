@@ -27,14 +27,14 @@ const config = {
     watch: __dirname + '/views/**/*.pug',
   },
   styles: {
-    src: __dirname + '/assets/src/scss/application.scss',
+    src: __dirname + '/assets/scss/application.scss',
     dist: __dirname + '/public/css',
-    watch: __dirname + '/assets/src/scss/**/*.scss',
+    watch: __dirname + '/assets/scss/**/*.scss',
   },
   js: {
-    src: __dirname + '/assets/src/js/application.js',
+    src: __dirname + '/assets/js/application.js',
     dist: __dirname + '/public/js',
-    watch: __dirname + '/assets/src/js/**/*.js',
+    watch: __dirname + '/assets/js/**/*.js',
   },
   browserSync: {
     files: __dirname + '/views/**/*',
@@ -43,7 +43,7 @@ const config = {
   },
   dist: __dirname + '/public/**/*',
   images: {
-    src: __dirname + '/assets/src/**/*.{gif,jpg,png,svg}',
+    src: __dirname + '/assets/**/*.{gif,jpg,png,svg}',
   }
 }
 
