@@ -28,12 +28,12 @@ const config = {
   },
   styles: {
     src: __dirname + '/assets/src/scss/application.scss',
-    dist: __dirname + '/assets/dist/css',
+    dist: __dirname + '/public/css',
     watch: __dirname + '/assets/src/scss/**/*.scss',
   },
   js: {
     src: __dirname + '/assets/src/js/application.js',
-    dist: __dirname + '/assets/dist/js',
+    dist: __dirname + '/public/js',
     watch: __dirname + '/assets/src/js/**/*.js',
   },
   browserSync: {
@@ -41,7 +41,7 @@ const config = {
     proxy: 'http://localhost:3000',
     browser: 'google chrome',
   },
-  dist: __dirname + '/assets/dist/**/*',
+  dist: __dirname + '/public/**/*',
   images: {
     src: __dirname + '/assets/src/**/*.{gif,jpg,png,svg}',
   }
