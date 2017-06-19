@@ -1,8 +1,14 @@
 html
   head
-    title #{title}
+    title
+      if title
+        #{title}
+      else
+        | News Counterpoint
+
     block head
       link(rel='stylesheet' type='text/css' href='http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css')
+      link(rel='stylesheet' type='text/css' href='https://cdn.quilljs.com/1.2.6/quill.snow.css')
       link(rel='stylesheet' type='text/css' href='css/application.css')
   body
     include ../components/header
