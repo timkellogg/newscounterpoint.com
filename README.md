@@ -9,10 +9,13 @@ Need to have installed:
   - NPM 5
   - mongodb
 
-`npm install`
-`npm i -g gulp`
-`npm start`
-`npm run dev`
+1. `npm install`
+
+2. `npm i -g gulp`
+
+3. `npm start`
+
+4. `npm run dev`
 
 
 
