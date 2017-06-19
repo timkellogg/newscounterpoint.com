@@ -1,8 +1,13 @@
 form(action = action method = method)
   label Title
   input(name='title' type='text')
+
   label Publish?
   input(name='published' type='checkbox')
-  textarea(name='body').js-wysiwyg
+
+  label Enable Comments?
+  input(name='commentable' type='checkbox')
+
+  .js-wysiwyg
 
   button Create

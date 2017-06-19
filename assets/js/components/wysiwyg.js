@@ -17,6 +17,13 @@ export default class Wysiwyg {
       },
       theme: 'snow',
     }
+    
+    this.bindListeners()
+  }
+
+  bindListeners() {
+    if (!this.$el) return
+    
     this.$editor = new Quill(this.$el, this.options)
   }
 }

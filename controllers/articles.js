@@ -26,10 +26,12 @@ async function Create(ctx) {
     const article = new Article({ title, body, published })
 
     await article.save()
-    
+    await ctx.redirect(`${prefix}`)
   } catch(err) {
     console.error(err)
+
     ctx.status = 422
+
     await ctx.render(`${prefix}/new`)
   }
 }

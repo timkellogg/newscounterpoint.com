@@ -11,6 +11,8 @@ export default class Header {
   }
 
   bindListeners() {
+    if (!this.$el) return
+
     this.$trigger.click((event) => {
       this.$el.toggleClass('header--open')
       this.$hamburger.toggleClass('header__hamburger--active')

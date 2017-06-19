@@ -100,30 +100,6 @@ const tasks = {
     .pipe(gulpif(production, uglify()))
     .pipe(gulp.dest(config.js.dist))
   },
-  // browserify() {
-  //   let bundler = browserify(config.js.src, {
-  //     debug: !production,
-  //     cache: {}
-  //   })
-  //     .transform(babelify.configure({ presets: ['es2015']}))
-
-  //   const build = argv._.length ? argv._[0] === 'build' : false;
-
-  //   if (watch) {
-  //     bundler = watchify(bundler)
-  //   }
-
-  //   const rebundle = () => {
-  //     return bundler.bundle()
-  //       .on('error', handleError('Browserify'))
-  //       .pipe(source('application.js'))
-  //       .pipe(gulpif(production, buffer()))
-  //       .pipe(gulpif(production, uglify()))
-  //       .pipe(gulp.dest(config.js.dist))
-  //   }
-  //   bundler.on('update', rebundle)
-  //   return rebundle()
-  // },
 
   optimize() {
     return gulp.src(config.images.src)
