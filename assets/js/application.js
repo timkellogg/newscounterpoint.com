@@ -1,3 +1,8 @@
-import Header from './components/header'
+import $        from 'jquery'
+import Header   from './components/header'
+import Wysiwyg  from './components/wysiwyg'
 
-new Header()
+$(document).ready(() => {
+  new Header()
+  new Wysiwyg()
+})
