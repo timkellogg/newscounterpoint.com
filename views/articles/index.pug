@@ -7,6 +7,10 @@ block content
         = article.title
         != article.body
         = article.published
+        
+        if article.commentable
+          include comments
     else
       h2 No articles
+    
     
