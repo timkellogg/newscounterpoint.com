@@ -5,7 +5,7 @@ block content
     if articles.length
       each article in articles
         = article.title
-        = article.body
+        != article.body
         = article.published
     else
       h2 No articles

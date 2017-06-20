@@ -3,7 +3,9 @@ import Quill from 'quill'
 
 export default class Wysiwyg {
   constructor() {
-    this.$el     = document.querySelector('.js-wysiwyg')
+    this.$el        = document.querySelector('.js-wysiwyg')
+    this.$form      = $('form')
+    this.$textarea  = this.$form.find('.js-select')
     this.options = {
       modules: {
         toolbar: [
@@ -24,6 +26,16 @@ export default class Wysiwyg {
   bindListeners() {
     if (!this.$el) return
     
-    this.$editor = new Quill(this.$el, this.options)
+    const editor = new Quill(this.$el, this.options)
+
+    this.$form.on('submit', (event) => {
+      event.preventDefault()
+
+      const markup = editor.container.firstChild.innerHTML
+
+      $(this).off()
+      this.$textarea.val(markup)
+      this.submit()
+    })
   }
 }

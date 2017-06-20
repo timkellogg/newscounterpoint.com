@@ -95,6 +95,8 @@ var Wysiwyg = function () {
     _classCallCheck(this, Wysiwyg);
 
     this.$el = document.querySelector('.js-wysiwyg');
+    this.$form = (0, _jquery2.default)('form');
+    this.$textarea = this.$form.find('.js-select');
     this.options = {
       modules: {
         toolbar: [[{ header: [1, 2, false] }], ['bold', 'italic', 'underline'], ['image', 'code-block'], [{ 'script': 'sub' }, { 'script': 'super' }], ['blockquote', 'code-block'], [{ 'align': [] }]]
@@ -108,9 +110,21 @@ var Wysiwyg = function () {
   _createClass(Wysiwyg, [{
     key: 'bindListeners',
     value: function bindListeners() {
+      var _this = this;
+
       if (!this.$el) return;
 
-      this.$editor = new _quill2.default(this.$el, this.options);
+      var editor = new _quill2.default(this.$el, this.options);
+
+      this.$form.on('submit', function (event) {
+        event.preventDefault();
+
+        var markup = editor.container.firstChild.innerHTML;
+
+        (0, _jquery2.default)(_this).off();
+        _this.$textarea.val(markup);
+        _this.submit();
+      });
     }
   }]);
 
